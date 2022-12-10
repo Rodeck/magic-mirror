@@ -79,7 +79,12 @@ const CameraComponent = () => {
     }
   }
 
-  const cameraElement = (<Camera style={{height: "100%"}} ref={camera} />);
+  const cameraElement = (<div style={{
+    height: '100vh',
+    backgroundColor: 'black',
+  }}>
+
+  </div>)
   const imageElement = (<img style={{
     width: '100%',
     height: '100%',

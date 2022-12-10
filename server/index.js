@@ -1,40 +1,6 @@
-
-// var express = require('express');
-// var io = require('socket.io'), // include socket.io package
-// app = express(), // make an instance of express.js module
-// server = app.listen(ServerPort), // start a server on the port
-// socketServer = io(server); // create a socket server using the express server 
-// //initialise serial port initialization
-
-
-
-// // listener for all static file requests
-// socketServer.on('connection', openSocket);
-// // listener for websocket data
-
-
-// function serveFiles(request, response) {
-//     var fileName = request.params.name;
-//     // get the file name from the request
-//     response.sendFile(fileName);  // send the file
-//     //res.sendFile('d:/sp/'+fileName , { root : __dirname});
-// }
-
-// function openSocket(socket) {
-//     console.log('new user address: ' + socket.handshake.address);
-//     // send something to the web client with the data:
-//     socket.emit('message', 'Server listening on address : ' + socket.handshake.address);
-//     // this function runs if there's input from the client:
-
-//     // this function runs if there's input from the serialport:
-//     serialport.on('data', function (data) {
-//         console.log(data);
-//         socket.emit('message', data); // send the data to the client
-//     })
-// };
-
 var BaudRate = 9600;
 var ServerPort = 8080;
+const { exec } = require('child_process');
 
 const { SerialPort } = require('serialport')
 const express = require('express')
@@ -79,4 +45,21 @@ serialport.on('data', function (data) {
 server.listen(PORT, err=> {
   if(err) console.log(err)
   console.log('Server running on Port ', PORT)
+})
+
+app.get('/', (req, res) => {
+
+  const command = 'gphoto2 --capture-image-and-download';
+  exec(command, (err, stdout, stderr) => {
+    if (err) {
+      //some err occurred
+      console.error(err)
+    } else {
+     // the *entire* stdout and stderr (buffered)
+     console.log(`stdout: ${stdout}`);
+     console.log(`stderr: ${stderr}`);
+
+     res.send(stdout)
+    }
+  });
 })

@@ -7,8 +7,8 @@ run_app: run_server run_frontend
 run_server:
 	cd ./server
 	npm install
-	node ./server/index.js "usbTTY0"
+	setsid node ./server/index.js "usbTTY0" >/dev/null 2>&1 < /dev/null &
 
 run_frontend:
 	npm install
-	npm start
+	setsid npm start "usbTTY0" >/dev/null 2>&1 < /dev/null &
